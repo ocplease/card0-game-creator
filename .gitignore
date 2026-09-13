@@ -1,0 +1,5 @@
+.DS_Store
+.card0/
+.env*
+node_modules/
+artifacts/

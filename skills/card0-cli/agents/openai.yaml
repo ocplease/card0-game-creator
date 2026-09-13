@@ -1,0 +1,4 @@
+interface:
+  display_name: "Card0 CLI"
+  short_description: "Author and submit Card0 game drafts"
+  default_prompt: "Use $card0-cli to create or manage a Card0 game through the card0 CLI, validate it, and request explicit approval before submission."

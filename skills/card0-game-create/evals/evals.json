@@ -1,0 +1,82 @@
+{
+  "skill_name": "card0-game-create",
+  "evals": [
+    {
+      "id": 1,
+      "name": "build-english-game-from-youtube",
+      "prompt": "Make this a card0 game: https://www.youtube.com/watch?v=MNb8pGvKn6w&t=295s. This is a 2-player desert-themed drafting game called Desperate Oasis. Use the English rules exactly as shown in the video.",
+      "expected_output": "A validated English manifest plus one complete card0 CLI sample card from each deck, with each sample already showing its exact English title, rules, numbers, frame, and illustration. The samples are shown to the user and generation pauses for explicit per-deck visual approval. No remaining deck images or backs are generated before approval; after approval, the remaining ready-to-play images are generated and uploaded.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "localize-existing-game-to-zh-Hans",
+      "prompt": "再做一個中文版的 Desperate Oasis: game id b3abeac2-0404-49ba-b09b-5776b82eeb62. Translate all card names and ability text into Simplified Chinese, regenerate the cover and every card image with the Chinese text rendered on the artwork, and publish the new game as a separate zh-Hans game.",
+      "expected_output": "A new Chinese (zh-Hans) manifest with translated metadata and one complete localized card0 CLI sample per deck. Each sample contains the exact Chinese title, ability text, numbers, frame, and illustration and is shown for explicit approval before the remaining localized cards are generated. No code-rendered text is used.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "localize-existing-game-to-ja",
+      "prompt": "日本語版も作って: game id 11111111-1111-4111-8111-111111111111. Translate everything into Japanese and regenerate the artwork with the Japanese text on the image. Publish as a separate Japanese game.",
+      "expected_output": "A new Japanese (ja) manifest and one complete Japanese card0 CLI sample per deck, shown to the user before bulk generation. Manifest.language is \"ja\". Each sample contains its exact Japanese title, ability, numbers, and finished card layout. The workflow stops for approval and never uses code to overlay text.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "build-all-three-languages-at-once",
+      "prompt": "Make this a card0 game in English, Simplified Chinese, and Japanese all at once: https://www.youtube.com/watch?v=MNb8pGvKn6w. One game per language, each with its own localized artwork.",
+      "expected_output": "Three manifests are authored together with identical value/quantity/type fields. For every language and deck, exactly one complete localized card0 CLI sample is generated and shown to the user. Bulk generation pauses until those deck styles are explicitly approved; afterward each language receives full card0 CLI-rendered cards with all localized text and numbers already on the image.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "troubleshoot-image-too-large",
+      "prompt": "A supplied PNG is 6 MB and card0 card image upload returns IMAGE_TOO_LARGE. Help me upload it.",
+      "expected_output": "Mechanically compress the supplied file below 5 MB, then upload it through card0. Explain that generation already saves remotely and needs no re-upload. Do not regenerate or charge credits for a compression task.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "map-deck-card-and-accessory-backs",
+      "prompt": "Build a game with a role deck, an action deck, secret-location cards whose reverse sides contain different clues, and 1/5/10-point tokens. No special back rule is stated for the role deck, action deck, or tokens.",
+      "expected_output": "The role deck and action deck receive two distinct theme-matched shared backs; every secret-location card keeps its own required clue back; each point token uploads the same localized token image as both front and back. The complete mapping is recorded in cards_plan.json. Any explicit game-specific back requirement overrides these defaults.",
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "apply-default-card-size-and-template",
+      "prompt": "Create a party card game with role cards and action cards. I did not specify card dimensions or a layout style.",
+      "expected_output": "Both decks use the fallback 1500 × 2100 px portrait canvas representing 63 × 88 mm cards. cards_plan.json records one consistent named template per deck: character-role for roles and illustrated-action for actions. card0 CLI first generates one complete ready-to-play sample per deck containing the exact title, rules, numbers, frame, and illustration. The samples are shown for approval before any remaining fronts or backs are generated. No visible content is drawn or overlaid with code. Explicit game-specific dimensions override these defaults.",
+      "files": []
+    },
+    {
+      "id": 8,
+      "name": "card0-cli-text-heavy-decks-with-sample-gate",
+      "prompt": "Create a trivia game with a 100-card question deck and a 20-card number deck. Make it visually polished.",
+      "expected_output": "Question and number cards use card0 CLI even though they are text-heavy. Exactly one complete ready-to-play sample from each deck is generated first, including its exact title, question or number, supporting labels, frame, and finished visual design. Both samples are shown to the user and all remaining fronts and backs wait for explicit deck-style approval. No PIL, HTML, SVG, Canvas, or other code is used to render visible card content.",
+      "files": []
+    },
+    {
+      "id": 9,
+      "name": "codenames-tabletop-components",
+      "prompt": "制作简体中文经典版行动代号。先给组件和初始设置方案，不创建游戏或生成美术。",
+      "expected_output": "Plans independent word and preprinted positional key decks, shared human consultation of the same key, identity cover markers and player-adjudicated turns/victory. Does not require word-dependent keys, enumerate word combinations, demand a rules engine, or ask permission for normal tabletop actions. Separates validated setup from manual play.",
+      "files": []
+    },
+    {
+      "id": 10,
+      "name": "manual-play-vs-explicit-automation",
+      "prompt": "为一款已有规则的卡牌游戏制作组件。玩家自行计算分数，另请评估能否让服务器自动阻止违规出牌；只做方案。",
+      "expected_output": "Preserves the component game and ordinary player scorekeeping without a blocker. Separately verifies support for the explicitly requested server enforcement and reports any limit without claiming the physical game is unplayable.",
+      "files": []
+    },
+    {
+      "id": 11,
+      "name": "paid-generation-only",
+      "prompt": "Generate a cover and three unique card fronts for my draft. Use a direct image provider if credits run out.",
+      "expected_output": "Uses only card0 generation commands, estimates 200 credits before revisions, generates one sample per deck before the remaining fronts, and stops on insufficient credits. Does not bypass billing. Checks saved results before retrying an uncertain request.",
+      "files": []
+    }
+  ]
+}
