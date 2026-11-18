@@ -1,26 +1,25 @@
 # card0-game-creator
 
-Agent skills for creating, editing, validating, and submitting playable card0 games.
+Agent skills for creating, testing, balancing and publishing Card0 games.
+Every Card0 game is a **3D game**: rules written as code (TypeScript), played on
+Card0's 3D table by people and 3D AI characters. The platform supplies the
+room, table, animations, AI players, chat, AI host, lobby, restart and results;
+a game supplies rules and content.
 
-## Install
+## Skills
 
-Install Node.js 20.9 or newer and the card0 CLI:
+Copy all three folders in `skills/` into your agent's skill directory (for
+Codex, `~/.codex/skills/`) and keep them side by side.
 
-```sh
-npm install -g @card0/cli
-card0 login
-```
+- `card0-game`: entry point; routes a request to the right skill.
+- `card0-3d-game`: the whole workflow for a game: design, `game.json`, `rules.ts`, scenarios, a simple AI player, dev-table play, balance simulation, publishing, edit copies. Includes the engine contract, the 3D table layout reference and the best practices.
+- `card0-cli`: login, account id, and paid cover / card art through the card0 CLI.
 
-Copy all three folders in `skills/` into your agent's skill directory (for Codex, `~/.codex/skills/`). Keep them alongside each other so relative references resolve.
+## Requirements
 
-- `card0-game`: routes game authoring requests.
-- `card0-game-create`: tutorial-to-game workflow, artwork, localization, and setup.
-- `card0-cli`: command guidance for existing and new games.
+- A checkout of the card0 repository (`ocplease/card0`) with `npm install` done: the engine, the `games/` folder, `npm run game` and the dev table (`/dev/table`) live there. Its `games/README.md` is the same guide in short.
+- For art only: Node.js 20.9+ and the card0 CLI (`npm install -g @card0/cli`, then `card0 login`). Each generated image costs 50 Card0 credits.
+- Publishing writes one SQL statement that must run with owner rights on Card0's database (a maintainer's job if you don't have that access).
 
-## Image generation
-
-All generated images use card0 CLI commands and Card0 credits: **50 credits per successful image**, including samples and revisions. Uploading supplied or reused images does not generate art. No standalone image-provider skill is included.
-
-Requires a CLI release exposing `card0 game image generate` and `card0 card image generate`; verify both with `--help`. If the npm release lacks them, these skills require the updated CLI before generation can proceed. Do not use a direct-provider fallback.
-
-The backend saves generated images automatically. Generated backs apply to the whole deck. Read the image pipeline reference before generating images or estimating costs.
+The previous 2D card-kit workflow (manifests of printed cards, auto-setup
+recipes, `card0 game create --file`) has been retired.

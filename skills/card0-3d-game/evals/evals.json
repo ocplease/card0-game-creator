@@ -1,0 +1,33 @@
+{
+  "skill_name": "card0-3d-game",
+  "evals": [
+    {
+      "id": 1,
+      "name": "new-word-bluffing-game",
+      "prompt": "做一个 card0 游戏「瞎掰王」：每轮大家拿到同一个冷门词（比如王不留行、阿月浑子），只有全知者的卡上有真正的意思，其他人编故事；大家轮流解释后投票找全知者。投中 +2，骗到一人 +1，3 轮后最高分赢。要有 3D AI 机器人一起玩。",
+      "expected_output": "A games/<slug>/ folder with game.json (valid tags, workId), rules.md, rules.ts (text word cards, the meaning only on the 全知者's card, free-text explain action with suggestions, simultaneous vote in which the 全知者 also votes but is not counted, timers on every step, banner/goal/phase track), words.json with real meanings kept out of card text, scenarios for deal visibility, order, scoring, rounds and timeouts, and a bot.ts with a skill knob. check passes with no leaks; BALANCE.md shows seat win shares near even; the agent played full games on the dev table. Nothing is published without the user asking.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "hidden-role-night-game",
+      "prompt": "Add One Night Werewolf style game to card0 for 3–8 players with seer, robber, troublemaker, insomniac and two werewolves. AI bots must be able to play it.",
+      "expected_output": "Night steps in fixed order and fixed duration (also when the role is in the middle), per-seat beliefs as secrets so a robbed player still sees their old card, private peek/swap events sent only to the actor with peek/swap animations, night mood with sleeping seats, two speaking rounds with role-aware suggestions, a simultaneous vote shown with every character pointing, role mixes per player count in setups.json, myNotes in the view for language-model players, scenarios for each role, and a balance report per player count with the intended village/wolf range stated.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "fix-imbalanced-game",
+      "prompt": "In 瞎掰王 the 瞎掰者 always win in the simulation. Find out why and fix it.",
+      "expected_output": "The agent runs sim and reads at least one logged game, determines whether the rules or the bot causes the imbalance (e.g. a bot that can never find the truth, or a 全知者 who is obvious from waiting or text length), fixes that cause (bot skill, scoring or tie rule, data), reruns check and sim and reports before/after numbers.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "publish-with-art",
+      "prompt": "Publish my 3D game games/heist to card0 with a cover and card art.",
+      "expected_output": "The agent sets workId/creatorId, publishes as a draft, states the credit estimate, generates the cover and one sample card per deck with the card0 CLI and waits for approval before the rest, then republishes as published. It runs publish.sql only with owner database access (or hands the file over), verifies stored md5s, checks that the game opens on the 3D table, and reports what was verified live.",
+      "files": []
+    }
+  ]
+}

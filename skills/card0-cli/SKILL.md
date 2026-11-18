@@ -1,44 +1,53 @@
 ---
 name: card0-cli
-description: "Author Card0 games through the card0 CLI: authenticate, create or import games, manage decks and cards, validate drafts, preview them, and submit them for approval. Use whenever a user asks an agent to create, edit, inspect, validate, preview, or submit Card0 content with the CLI."
+description: "Use the card0 CLI around a Card0 3D game: log in, read the account's user id, list a game's decks and cards, generate or upload the cover and card art (paid, 50 credits each), inspect and remove images, and open a game in the browser. Games themselves are created with the card0-3d-game skill, not with this CLI."
 ---
 
-# Card0 CLI
+# Card0 CLI (account, art, preview)
 
-## Card0 product model — read before planning
+Card0 games are 3D games: rules as code, published from a `games/<slug>/`
+folder with the `card0-3d-game` skill. This CLI covers what is still done
+from a terminal around them. Don't use it to build a game out of decks and
+cards: `card0 game create`, `card import`, `card number-range`, manifests and
+setup recipes belong to the retired 2D card-kit workflow.
 
-Create a playable tabletop component kit, not a custom rules engine. Players handle communication, private consultation, moving/covering cards and rules adjudication as at a physical table. Auto setup handles initial preparation only. Read [../card0-game-create/references/tabletop-model.md](../card0-game-create/references/tabletop-model.md) before deciding what to build or declaring a game unsupported. Ordinary manual play is not a rules deviation.
+Never query or change Card0's database with this skill, and never ask for
+service-role credentials. In Card0's code a game is also called a **work**.
 
+## Setup
 
-Use `card0` for every Card0 authoring operation. Never query or mutate Card0's Supabase tables directly and never request service-role credentials.
+See [scripts/install.md](scripts/install.md), [commands/login.md](commands/login.md)
+and [commands/account.md](commands/account.md). `card0 account info` prints the
+logged-in user's id: that is the `creatorId` in a game's `game.json`.
 
-Card0 calls a complete authored experience a **game**; older app/database code may call it a **work**. A game contains named **decks**, and decks contain **cards**. Cards can be normal front/back cards or number cards and may have a quantity.
+## Find a game's cards
 
-## Image generation and credits
+```sh
+card0 game list
+card0 game show <gameId>
+card0 deck list --game <gameId>
+card0 card list --deck <deckId>
+```
 
-All image generation must use the card0 CLI and charge Card0 credits. Each successful cover, card face, shared deck back, or rule visual costs 50 credits. Read [image-pipeline.md](../card0-game-create/references/image-pipeline.md) for commands, cost estimates, sample approval, deck-wide back behavior, and safe retries. Never call providers or other image-generation tools directly. Upload commands are only for user-supplied or previously generated images.
+Decks and cards come from the game's `game.json` (by key) when it is
+published; their ids are what the image commands take.
 
-## Workflow
+## Art
 
-1. Confirm the executable with `card0 --help`. Treat it and subcommand help as authoritative when this skill differs from an installed CLI version.
-2. Authenticate only when needed. See [commands/login.md](commands/login.md) and [commands/account.md](commands/account.md).
-3. Create or select a game, then create or select a deck. See [commands/game.md](commands/game.md) and [commands/deck.md](commands/deck.md).
-4. Add and update cards. See [commands/card.md](commands/card.md).
-5. Set the structured metadata (categories, mechanics, estimated minutes) on every game—submission requires all of them. `card0 game rule-image generate` can also produce a 50-credit visual guide for the rules when the user asks for one. See [commands/game.md](commands/game.md).
-6. Run validation and fix every error before presenting the draft as complete.
-7. Use `card0 game open` when the user wants a browser preview.
-8. Run `card0 game submit` only after the user explicitly authorizes submission. Creating or validating a draft is not submission authorization.
-9. Run `card0 game delete` only after the user explicitly asks to delete a game. Deletion is unrecoverable (rows and images), so "clean up" or "fix this game" is not delete authorization — confirm first. Only draft/private games can be deleted.
-10. Use `card0 card image list` before deleting a card image so the exact variant ID and selected/default state are visible. Run `card0 card image delete` only for images the user clearly asked to remove; it is permanent and the default face is protected.
+Read [references/image-pipeline.md](references/image-pipeline.md) before
+generating anything: costs, the draft-only rule, sample approval, and how the
+3D table draws card images. Commands: [commands/game.md](commands/game.md),
+[commands/card.md](commands/card.md).
 
-Successful commands emit JSON to stdout. Progress and errors use stderr. Inspect exit status before trusting output. Directory bindings are stored in `.card0/context.json`; explicit `--game` and `--deck` flags override them. See [references/output-and-context.md](references/output-and-context.md).
+## Preview
 
-For bulk work, prefer a schema-versioned manifest and validate it before remote creation. Put generated manifests in a temporary directory or a neutral user project location—never in Card0's built-in game/source directories. See [references/manifest.md](references/manifest.md).
+`card0 game open <gameId>` opens the game in the browser (the normal Card0
+login applies).
 
-Use these walkthroughs when useful:
+## Rules for agents
 
-- [examples/create-manually.md](examples/create-manually.md)
-- [examples/create-from-manifest.md](examples/create-from-manifest.md)
-- [examples/validate-and-submit.md](examples/validate-and-submit.md)
-
-For auto setup, read [references/setup.md](references/setup.md). Define and test each deck’s playable composition for every supported player count before random dealing; surplus roles must be excluded from the session, not left in draw piles.
+- Successful commands print JSON on stdout; errors go to stderr with a nonzero exit code. See [references/output-and-context.md](references/output-and-context.md).
+- Treat `card0 --help` and subcommand help as authoritative when they differ from this skill.
+- Only `draft` and `private` games can be changed through the CLI (that includes generating art).
+- Generating images costs credits: state the estimate and stay within what the user authorized.
+- `card0 game delete` and `card0 card image delete` are permanent: only on the user's explicit request.
