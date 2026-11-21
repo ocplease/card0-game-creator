@@ -105,3 +105,30 @@ If the game needs a gesture the table doesn't have, add a kind to `TableFx`
 in `packages/card0-game-engine/src/contract.ts` and play it in
 `lib/table3d/TableScene.js` (`playFx`), then every game can use it. Do this
 in a separate change to the platform, and say so in your report.
+
+## The game's own props and moves (`animations.json`)
+
+Props in front of a seat (`seats[i].props`, names) and the moves acted out
+with them (`chore` fx, `value` = a move name) belong to the game, as data:
+
+```json
+{
+  "version": 1,
+  "models": { "potato": "assets/potato.glb", "knife": "assets/knife.glb", "peel": "assets/peel.glb" },
+  "props": { "potato": { "model": "potato", "at": [-0.17, 0.02], "height": 0.036 } },
+  "moves": { "peel": { "duration": 2.8, "steps": [
+    { "lift": "potato", "time": 0.4 },
+    { "spin": "potato", "turns": 2.5, "at": 0.4, "time": 1.9 },
+    { "hold": "knife", "at": 0.4, "time": 1.9 },
+    { "drop": "peel", "count": 4, "at": 0.6, "time": 1.6 },
+    { "return": "potato", "at": 2.35 }
+  ] } }
+}
+```
+
+- Models: GLB, everything embedded, no compression extensions; ≤ 4 MB and 60k triangles each, 250k in all, ≤ 24. Export them from `art/art.js` (`window.CARD0_ART.models`).
+- Props: `model`, `at: [x, z]` (metres; x to the seat's right, z toward the middle), `height`, `turn`, `tilt` (lays a standing model down; `lift … upright` stands it up), `scale`. ≤ 8.
+- Steps (each starts at `at`, default when the previous ends, and lasts `time`): `lift`, `spin`, `wobble`, `unfold` (named nodes), `hold` (a model in a hand), `drop`, `rise`, `toss` … `into`, `give` (to the event's `to` seat, `wait`), `take`, `knock`, `return`, `body` (jump, stand, stretch, scratch, wave, look, nod, shake, reach, point), `emoji`. ≤ 40 moves, ≤ 24 steps, ≤ 6 s each. Lifted props go back by themselves.
+- `propActions` maps a prop name to the action a tap takes (`mine`, `theirs`).
+- Names the game doesn't define fall back to the built-in bowl / potato / corn and body moves.
+- `npm run game -- check <slug>` validates it like the server; see `games/ahoukiller/animations.json`.

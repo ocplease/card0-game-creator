@@ -31,8 +31,15 @@ platform checks (playouts, leak check, scenarios) in its sandbox, then saves:
 - the user's **published** game → the user's **edit copy** (the published game is untouched until the copy is submitted and approved).
 
 Details come from `game.json` and `rules.md`; decks and cards by key (images
-generated in the app are kept; only full `https://` image URLs in game.json
-are sent). It writes a `workId` into a `game.json` that has none, and selects
+generated in the app are kept unless game.json sets one). The game's own files
+named by paths in the folder (`cover`, `preview`, card `image` / `backImage`,
+the models in `animations.json`) are uploaded first, as the user, into the
+game's own storage folder `works/<workId>/pkg/` (content-addressed: unchanged
+files aren't sent again) and pushed as their URLs; a new game gets a first
+push without files to create it. `animations.json` (the game's props and
+moves) goes with the build; the worker checks it and every GLB model.
+Images: jpg/png/webp ≤ 5 MB; models: .glb ≤ 4 MB; preview: .webm/.mp4 ≤ 25 MB.
+Site paths (`/media/…`) are not sent. It writes a `workId` into a `game.json` that has none, and selects
 the game it wrote to for the image commands below. Output: `workId`,
 `sourceWorkId`, `editCopy`, `created`, `status`, `build`, `checks`. Failed
 checks print the report on stderr and exit nonzero (a `failed` build is
