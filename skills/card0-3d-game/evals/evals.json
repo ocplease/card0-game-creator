@@ -26,7 +26,7 @@
       "id": 4,
       "name": "publish-with-art",
       "prompt": "Publish my 3D game games/heist to card0 with a cover and card art.",
-      "expected_output": "The agent sets workId/creatorId, publishes as a draft, states the credit estimate, generates the cover and one sample card per deck with the card0 CLI and waits for approval before the rest, then republishes as published. It runs publish.sql only with owner database access (or hands the file over), verifies stored md5s, checks that the game opens on the 3D table, and reports what was verified live.",
+      "expected_output": "The agent signs in with the card0 CLI as the user (never asks for database keys), sets workId/creatorId (creatorId from `card0 account info`), runs `card0 game push games/<slug>` so the game is the user's checked draft, states the credit estimate, generates the cover and one sample card per deck with the card0 CLI and waits for approval before the rest, pushes again after changes, and submits for review only when the user asks. It checks that the game opens on the 3D table and reports what was verified live.",
       "files": []
     }
   ]

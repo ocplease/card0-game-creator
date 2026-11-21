@@ -33,28 +33,51 @@
 - `sourceFiles`: data JSON files the rules import. They are stored with the build as `rules/<name>.ts` so an edit copy can change them in the AI studio.
 - Same-name check: before choosing a name, make sure no other Card0 game already uses it (an old 2D game with the same name confuses players and testers).
 
-## Publish
+## Publish (signed in as the user: `card0 game push`)
+
+Publishing runs as the **user who is signed in to the card0 CLI**. No database
+keys, no SQL: the user's login decides whose game it is, and Card0's game
+worker does the rest server-side.
 
 ```bash
-npm run game -- publish <slug>                 # status "published"
-npm run game -- publish <slug> --status draft  # a draft first (for cover/card art)
+card0 login web --open                 # once; the user signs in in the browser
+card0 account info                     # the user id: put it in game.json as creatorId
+card0 game push games/<slug>           # check + save: the user's draft (or edit copy)
+card0 game status games/<slug>         # status, current build, open edit copy
+card0 game submit games/<slug> --yes   # send to review (only when the user asks)
 ```
 
-This builds, re-runs the checks and writes `games/<slug>/.build/publish.sql`,
-one statement that:
-- creates or updates the game row (`runtime = 'engine'`, so it opens on the 3D table), its tags and minutes;
-- creates or updates the decks and cards by key, keeping images already generated in the app unless game.json sets them;
-- saves a new build (revision n+1) with the bundled rules, the studio-editable source and the check report, and points the game at it.
+Run `card0` from the card0 checkout with `npm run card0 -- <args>` if the
+global CLI is older than 0.4 (`card0 --version`).
 
-The SQL must run with owner rights on Card0's database (a maintainer's
-`psql`, or the Supabase SQL tool with project-owner access). If you don't have
-that access, hand over the file; never ask the user for service-role keys or
-passwords. When passing the SQL through a tool that re-transcribes text,
-verify the stored result: compare `md5(rules_js)` and the per-file md5 of
-`rules_source` against the local `.build/build.json`. Unicode escapes can
-silently change in transit. `--lean` stores a rules-only bundle and a
-pointer to the repository instead of the source (smaller, but an edit copy
-then has nothing to edit); avoid it unless the SQL is too big to send.
+What `card0 game push` does:
+- Reads `game.json` (details and decks), `rules.md` (the lobby's rules text), `rules.ts`, `scenarios.ts`, `notes.md` and the `sourceFiles` data (sent as `rules/<name>.ts`, the AI studio's layout). `bot.ts` and `BALANCE.md` stay in the repository. If `game.json` has no `workId`, it writes a new one there once: keep it.
+- Sends them with the user's access token to the game worker, which bundles the rules and runs the platform checks (random playouts at every player count, the hidden-information leak check, your scenarios) in its sandbox, the same checks as the AI studio.
+- Where it writes:
+  - a new `workId` → a new **draft** owned by the user, played on the 3D table;
+  - the user's draft or private game → updated in place;
+  - the user's **published** game → the user's **edit copy** of it (made on the first push, reused after). The published game does not change until the copy is submitted and approved.
+- Saves the decks and cards by key (images already generated in the app are kept unless `game.json` sets full `https://` image URLs; site paths like `/media/…` are not sent) and a new build: `tested` if the checks pass. If they fail, nothing changes in the game, a `failed` build is recorded, the report is printed on stderr and the command exits nonzero: fix and push again.
+- Prints JSON: `workId` (the draft or the edit copy it wrote to), `sourceWorkId` (the published game, for an edit copy), `editCopy`, `created`, `status`, `build` (`revision`, `status`), `checks`.
+
+Going public: `card0 game submit` (or `push --submit`) sends the game to
+**review**: a draft becomes `pending approval`; an edit copy replaces the
+published game and goes to review, exactly like Edit → Publish in the app.
+An admin's approval makes it public. It needs a build that passed the checks.
+Submit only when the user asks.
+
+A push is refused (403) when the signed-in user doesn't own the game: check
+`card0 account info` against `creatorId`. Never ask for service-role keys,
+database passwords or SQL access to get around it.
+
+### Maintainers only: publish.sql
+
+`npm run game -- publish <slug>` still writes `games/<slug>/.build/publish.sql`
+(one statement that creates or updates the game, its cards and a published
+build). It needs owner rights on Card0's database and skips review, so it is
+for Card0's own maintainers, not for agents working for a user. When passing
+the SQL through a tool that re-transcribes text, verify the stored
+`md5(rules_js)` and per-file `rules_source` against `.build/build.json`.
 
 ## Cover and card art (optional)
 
@@ -62,13 +85,14 @@ The 3D table draws every card itself: a name band, a letter and the
 description, or for text cards the title and text. Art is optional.
 
 When the user wants art, use the card0 CLI (`card0-cli` skill; 50 credits per
-generated image, state the estimate first) while the game is a **draft**:
+generated image, state the estimate first) while the game is a **draft**
+(right after `card0 game push`; the push selects the game for these commands):
 
-1. Publish with `--status draft`.
+1. `card0 game push games/<slug>`.
 2. `card0 game image generate <workId>`: the cover (drafts only).
 3. `card0 card image generate <cardId> --face front --prompt "…"`: the table draws a card's image edge to edge as the whole card face, so ask for a complete card with its exact title and text in the game's language. One sample per deck first; show it and get approval before the rest.
 4. `card0 card image generate <cardId> --face back --prompt "…"`: one textless back per deck (applies to the whole deck).
-5. Re-run `npm run game -- publish <slug>` (status published). Images generated in the app are kept.
+5. Push again after any change (images generated in the app are kept), then `card0 game submit` when the user asks.
 
 Text cards (words, answers) never need art.
 
