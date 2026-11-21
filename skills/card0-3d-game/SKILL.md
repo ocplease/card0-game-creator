@@ -136,13 +136,12 @@ npm run game -- sim <slug> --games 1 --log 1
 
 ### 7. Publish (only when the user asks)
 
-Follow [references/publish.md](references/publish.md): `npm run game -- publish <slug>`
-builds, re-checks and writes `games/<slug>/.build/publish.sql`, which creates
-or updates the game, its decks and cards and a new build in one statement.
-It must be run with owner rights on Card0's database. If you don't have them,
-give the file to a maintainer; don't ask the user for database keys. Optional
-cover and card art use the card0 CLI (the `card0-cli` skill) while the game is
-a draft.
+Follow [references/publish.md](references/publish.md): sign in with the
+card0 CLI as the user (`card0 login web --open`), then `card0 game push
+games/<slug>`. The game worker checks the rules in its sandbox and saves them
+as the user's draft (or the user's edit copy of their published game);
+`card0 game submit` sends it to review when the user asks. No database keys
+or SQL: never ask the user for them.
 
 Then verify on the real app: the game opens on the 3D table (not the old 2D
 table), the lobby shows `rules.md`, AI players join and talk, and a full game
@@ -152,7 +151,7 @@ reaches the results screen.
 
 ## Changing an existing 3D game
 
-- In the repository: edit `games/<slug>/`, run `check` and `sim` again, and republish (a new build revision; the game id stays the same).
+- In the repository: edit `games/<slug>/`, run `check` and `sim` again, and `card0 game push` (it goes to the user's edit copy of the published game), then `card0 game submit` when the user asks.
 - In the app: **Edit** on a published 3D game makes an edit copy that opens in the AI studio with the rules, scenarios and data (`rules/<name>.ts`). Publishing the copy replaces the game and keeps its builds and results. A copy needs a tested build before it can be published.
 - Words, roles per player count and timers live in data/constants: change those before touching game logic.
 
