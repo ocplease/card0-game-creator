@@ -36,9 +36,7 @@ seats[i] = {
 
 | Field | Use |
 |---|---|
-| `banner` | **What happens now and what this player should do**, rewritten per phase and per seat ("轮到你解释「葳蕤」" vs "小白 正在解释……"). |
-| `goal` | `{ text, icon, card, tone: "good"/"evil"/"neutral" }`: this player's aim in a few words with their role/word card. Changes as the game goes. |
-| `phase` | `{ steps: [{ key, label, icon }], current, round?, rounds? }`: the flow as a track. `current: ""` when over. |
+| `banner` | **News the table can't show**, one short line, per seat and said once: a night narrator line, what just happened to this player, a reveal's meaning, a result. Leave it out while turns simply run: the top of the table then shows just the clock. |
 | `center` | Middle row: center cards, a public word card, answers to vote on. Pick with `on: "center"`. |
 | `piles` | `{ id, label, back, count, card? }` stacks in the middle (deck, the role list of this game). |
 | `mood` | `"night"` dims the room. |

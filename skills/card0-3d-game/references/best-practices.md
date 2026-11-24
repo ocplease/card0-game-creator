@@ -5,9 +5,9 @@ comes from a real mistake.
 
 ## Make the next step obvious without text
 
-1. **Banner = what to do now, for this seat.** Rewrite it for every phase and seat: "轮到你解释「葳蕤」" for the speaker, "小白 正在解释……" for everyone else, "等其他人投票……" once you've voted.
-2. **Goal chip = what you're after**, in a few words, with your role or word card attached (`goal.card`). It changes when your aim changes (e.g. at the end: "你一共 5 分").
-3. **Phase track** for the flow (夜晚 → 发言 → 投票) with round x/y. Players should see where the game is and how much is left.
+1. **The top of the table is the clock.** While turns simply run, leave `banner` out: the table shows just the clock and the seconds left. Whose move it is shows on the table (`speaking`, an `info` mark); what to do shows in the glowing seats and cards, the action buttons and their tap `prompt`s ("点你怀疑的人").
+2. **A banner only for news**, one short line, said once, that the table can't show: the narrator at night ("🌙 预言家请睁眼……"), what just happened to this player ("小白 给了你一张 FLIP 3：点一位玩家"), what a reveal means, a round's result, a new round ("第 2 轮 / 共 3 轮").
+3. **What a player holds or has earned sits with them.** Their role or word is their own card on the table (hold to look); scores and status go in `marks` on their name tag.
 4. **One tap where possible.** Use `pick` on seats, cards and the middle row instead of a list of buttons. If only one move exists and it's a tap, the table starts it. Avoid menus of 20 labelled actions.
 5. **Suggestions for every text action**, built from what this seat knows: the 全知者 gets the real meaning, a 瞎掰者 gets openings for a believable story ("这是古代的一种……"), a werewolf gets believable lies, a seer gets their actual finding phrased as a claim.
 6. **Every game finishes.** A fixed number of rounds or one decisive vote; every waiting step has a timer; a timeout does something sensible (skip the speech: "（没想好，跳过了）"; close the vote with the votes in).
