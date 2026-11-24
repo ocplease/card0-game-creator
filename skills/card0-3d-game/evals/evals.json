@@ -5,7 +5,7 @@
       "id": 1,
       "name": "new-word-bluffing-game",
       "prompt": "做一个 card0 游戏「瞎掰王」：每轮大家拿到同一个冷门词（比如王不留行、阿月浑子），只有全知者的卡上有真正的意思，其他人编故事；大家轮流解释后投票找全知者。投中 +2，骗到一人 +1，3 轮后最高分赢。要有 3D AI 机器人一起玩。",
-      "expected_output": "A games/<slug>/ folder with game.json (valid tags, workId), rules.md, rules.ts (text word cards, the meaning only on the 全知者's card, free-text explain action with suggestions, simultaneous vote in which the 全知者 also votes but is not counted, timers on every step, banner/goal/phase track), words.json with real meanings kept out of card text, scenarios for deal visibility, order, scoring, rounds and timeouts, and a bot.ts with a skill knob. check passes with no leaks; BALANCE.md shows seat win shares near even; the agent played full games on the dev table. Nothing is published without the user asking.",
+      "expected_output": "A games/<slug>/ folder with game.json (valid tags, workId), rules.md, rules.ts (text word cards, the meaning only on the 全知者's card, free-text explain action with suggestions, simultaneous vote in which the 全知者 also votes but is not counted, timers on every step, the clock alone at the top with a banner only for news, no goal chip or phase track), words.json with real meanings kept out of card text, scenarios for deal visibility, order, scoring, rounds and timeouts, and a bot.ts with a skill knob. check passes with no leaks; BALANCE.md shows seat win shares near even; the agent played full games on the dev table. Nothing is published without the user asking.",
       "files": []
     },
     {

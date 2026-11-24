@@ -17,8 +17,8 @@ metadata:
 A Card0 game is **rules + content**. The platform already provides, for every
 game: the 3D room and table, dealing/flipping/holding cards, 8 AI characters
 (looks, motions, voices, personalities, chat), the lobby, live chat, AI host,
-identity check, restart/play again, results, the HUD (banner, phase track, goal
-chip, action buttons, tap-to-pick, speech box, night overlay, countdown), a
+identity check, restart/play again, results, the HUD (turn clock, news banner,
+action buttons, tap-to-pick, speech box, night overlay), a
 balance simulator and a hidden-information leak check.
 
 You write five things in one folder:
@@ -87,7 +87,7 @@ for the 3D table). Then apply every rule in
 [references/best-practices.md](references/best-practices.md). The most
 important ones:
 
-1. The banner says what to do now, the goal chip says what you're after, the phase track says where the game is. A newcomer never needs `rules.md` to know their next move.
+1. The top of the table is the clock. Whose move it is shows on the table (spotlight, a turn mark); what to do shows in the glowing seats and cards, the buttons and the tap prompts. A banner only for news the table can't show; no phase track, no goal chip. A newcomer never needs `rules.md` to know their next move.
 2. Every choice is a tap or a suggestion away; text actions come with `suggestions` built from what this seat knows.
 3. Every waiting step has a timer (`timer` in `apply`, `meta.startTimer` for the first step).
 4. Secrets are `secret(value, [seats])`; the table each player sees is built from what they know, not from the truth.
