@@ -37,8 +37,6 @@ seats[i] = {
 | Field | Use |
 |---|---|
 | `banner` | **News the table can't show**, one short line, per seat and said once: a night narrator line, what just happened to this player, a reveal's meaning, a result. Leave it out while turns simply run: the top of the table then shows just the clock. |
-| `goal` | Not used in new games (in live rooms the stream covers that corner). A role or word is the player's own card on the table. |
-| `phase` | Not used in new games: the top of the table is the clock. Say a new round once in `banner`. |
 | `center` | Middle row: center cards, a public word card, answers to vote on. Pick with `on: "center"`. |
 | `piles` | `{ id, label, back, count, card? }` stacks in the middle (deck, the role list of this game). |
 | `mood` | `"night"` dims the room. |

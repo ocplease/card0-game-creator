@@ -87,7 +87,7 @@ for the 3D table). Then apply every rule in
 [references/best-practices.md](references/best-practices.md). The most
 important ones:
 
-1. The top of the table is the clock. Whose move it is shows on the table (spotlight, a turn mark); what to do shows in the glowing seats and cards, the buttons and the tap prompts. A banner only for news the table can't show; no phase track, no goal chip. A newcomer never needs `rules.md` to know their next move.
+1. The top of the table is the clock. Whose move it is shows on the table (spotlight, a turn mark); what to do shows in the glowing seats and cards, the buttons and the tap prompts. A banner only for news the table can't show. A newcomer never needs `rules.md` to know their next move.
 2. Every choice is a tap or a suggestion away; text actions come with `suggestions` built from what this seat knows.
 3. Every waiting step has a timer (`timer` in `apply`, `meta.startTimer` for the first step).
 4. Secrets are `secret(value, [seats])`; the table each player sees is built from what they know, not from the truth.
